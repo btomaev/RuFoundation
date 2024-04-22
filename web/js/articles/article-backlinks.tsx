@@ -59,7 +59,7 @@ class ArticleBacklinksView extends Component<Props, State> {
         try {
             const data = await fetchArticleBacklinks(pageId);
             this.setState({ loading: false, data });
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ loading: false, fatalError: true, error: e.error || 'Ошибка связи с сервером' });
         }
     }
@@ -75,7 +75,7 @@ class ArticleBacklinksView extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onCancel(null);
         }

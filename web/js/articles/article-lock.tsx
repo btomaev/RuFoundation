@@ -61,9 +61,9 @@ class ArticleLock extends Component<Props, State> {
         this.setState({ loading: true });
         try {
             const data = await fetchArticle(pageId);
-            this.setState({ loading: false, locked: data.locked});
+            this.setState({ loading: false, locked: data.locked!});
             console.log(this.state)
-        } catch (e) {
+        } catch (e: any) {
             this.setState({loading: false, fatalError: true, error: e.error || 'Ошибка связи с сервером'});
         }
     }
@@ -75,7 +75,7 @@ class ArticleLock extends Component<Props, State> {
         }
 
         const { pageId } = this.props;
-        this.setState({ saving: true, error: null, savingSuccess: false });
+        this.setState({ saving: true, error: undefined, savingSuccess: false });
         const input = {
             pageId: pageId,
             locked: this.state.locked
@@ -87,7 +87,7 @@ class ArticleLock extends Component<Props, State> {
             this.setState({ savingSuccess: false });
             window.scrollTo(window.scrollX, 0);
             window.location.reload();
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ saving: false, fatalError: false, error: e.error || 'Ошибка связи с сервером' });
         }
     };
@@ -114,7 +114,7 @@ class ArticleLock extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onCancel(null);
         }

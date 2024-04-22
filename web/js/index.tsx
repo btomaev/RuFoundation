@@ -57,7 +57,7 @@ window.addEventListener('DOMContentLoaded', () => {
         } else if (node.classList.contains('w-toc')) {
             makeTOC(node);
         } else if (node.classList.contains('w-forum-post-options')) {
-            renderTo(node, <ForumPostOptions {...JSON.parse(node.dataset.config)} />);
+            renderTo(node, <ForumPostOptions {...JSON.parse(node.dataset.config!)} />);
         } else if (node.classList.contains('w-forum-thread')) {
             makeForumThread(node);
         } else if (node.classList.contains('w-forum-recent-posts')) {

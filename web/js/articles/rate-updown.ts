@@ -1,12 +1,12 @@
 import {showErrorModal} from "../util/wikidot-modal";
 import {ModuleRateResponse, ratePage} from "../api/rate"
 
-async function onClick(e: MouseEvent, pageId: string, vote: number): Promise<ModuleRateResponse> {
+async function onClick(e: MouseEvent, pageId: string, vote: number | undefined): Promise<ModuleRateResponse> {
     e.preventDefault();
     e.stopPropagation();
     try {
-        return await ratePage({pageId, value: vote});
-    } catch (e) {
+        return await ratePage({pageId, value: vote!});
+    } catch (e: any) {
         showErrorModal(e.error || 'Ошибка связи с сервером');
         throw e;
     }
@@ -28,10 +28,12 @@ export function makeUpDownRateModule(node: HTMLElement) {
 
     const pageId = node.dataset.pageId;
 
-    const number: HTMLElement = node.querySelector('.number');
-    const rateup: HTMLElement = node.querySelector('.rateup a');
-    const ratedown: HTMLElement = node.querySelector('.ratedown a');
-    const cancel: HTMLElement = node.querySelector('.cancel a');
+    if (!pageId) return;
+
+    const number: HTMLElement = node.querySelector('.number')!;
+    const rateup: HTMLElement = node.querySelector('.rateup a')!;
+    const ratedown: HTMLElement = node.querySelector('.ratedown a')!;
+    const cancel: HTMLElement = node.querySelector('.cancel a')!;
 
     const callback = function (votesData) {
         updateRating(number, votesData)
@@ -39,5 +41,5 @@ export function makeUpDownRateModule(node: HTMLElement) {
 
     rateup.addEventListener('click', (e) => onClick(e, pageId, 1).then(callback));
     ratedown.addEventListener('click', (e) => onClick(e, pageId, -1).then(callback));
-    cancel.addEventListener('click', (e) => onClick(e, pageId, null).then(callback));
+    cancel.addEventListener('click', (e) => onClick(e, pageId, undefined).then(callback));
 }

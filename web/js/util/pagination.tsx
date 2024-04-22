@@ -34,9 +34,9 @@ const Pagination: React.FC<Props> = ({page, maxPages, onChange}: Props) => {
     const showLeftDots = (centerFrom > leftTo + 1);
     const showRightDots =(centerTo < rightFrom - 1);
 
-    const leftPages = [];
-    const centerPages = [];
-    const rightPages = [];
+    const leftPages: JSX.Element[] = [];
+    const centerPages: JSX.Element[] = [];
+    const rightPages: JSX.Element[] = [];
 
     for (let i = leftFrom; i <= leftTo; i++) {
         if (i === page) {

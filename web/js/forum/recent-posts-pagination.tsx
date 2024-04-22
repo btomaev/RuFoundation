@@ -14,8 +14,8 @@ export function makeRecentPosts(node: HTMLElement) {
     (node as any)._recentposts = true;
     // end hack
 
-    const rpBasePathParams = JSON.parse(node.dataset.recentPostsPathParams);
-    const rpBaseParams = JSON.parse(node.dataset.recentPostsParams);
+    const rpBasePathParams = JSON.parse(node.dataset.recentPostsPathParams!);
+    const rpBaseParams = JSON.parse(node.dataset.recentPostsParams!);
 
     // display loader when needed.
     const loaderInto = document.createElement('div');
@@ -34,7 +34,7 @@ export function makeRecentPosts(node: HTMLElement) {
     node.appendChild(loaderInto);
 
     //
-    const switchPage = async (e: MouseEvent, page: string, addParams: {}) => {
+    const switchPage = async (e: MouseEvent | undefined, page: string, addParams: {}) => {
         if (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -56,8 +56,8 @@ export function makeRecentPosts(node: HTMLElement) {
             const tmp = document.createElement('div');
             tmp.innerHTML = rendered;
             const newNode = tmp.firstElementChild;
-            node.parentNode.replaceChild(newNode, node);
-        } catch (e) {
+            node.parentNode!.replaceChild(newNode!, node);
+        } catch (e: any) {
             ReactDOM.unmountComponentAtNode(loaderInto);
             loaderInto.innerHTML = '';
             loaderInto.style.display = 'none';
@@ -68,13 +68,13 @@ export function makeRecentPosts(node: HTMLElement) {
     // handle page switch
     const pagers = node.querySelectorAll(':scope > div > .thread-container > .pager');
     pagers.forEach(pager => pager.querySelectorAll('*[data-pagination-target]').forEach((node: HTMLElement) => {
-        node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget, {}));
+        node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget!, {}));
     }));
 
     // handle category change
     node.querySelector('.form input.btn')?.addEventListener('click', () => {
         const value = (node.querySelector('.form select') as HTMLSelectElement).value;
-        switchPage(null, "1", {c: value});
+        switchPage(undefined, "1", {c: value});
     });
 
 }

@@ -1,5 +1,5 @@
 import * as esbuild from 'esbuild';
-import {sassPlugin} from 'esbuild-sass-plugin';
+import { sassPlugin } from 'esbuild-sass-plugin';
 
 const args = process.argv.slice(2);
 const watch = args.includes('--watch');
@@ -14,12 +14,12 @@ async function build() {
     };
 
     const baseConfigCSS = {
-        entryPoints: ['index.scss'],
+        entryPoints: [ 'index.scss' ],
         outfile: '../../static/app.css',
         bundle: true,
         minify: true,
         sourcemap: true,
-        plugins: [sassPlugin()]
+        plugins: [ sassPlugin() ]
     };
 
     if (watch) {

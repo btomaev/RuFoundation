@@ -66,11 +66,11 @@ class ArticleSource extends Component<Props, State> {
     async loadSource() {
         const { pageId, source } = this.props;
         if (!source) {
-            this.setState({ loading: true, error: null });
+            this.setState({ loading: true, error: undefined });
             try {
                 const article = await fetchArticle(pageId);
-                this.setState({ loading: false, error: null, source: article.source });
-            } catch (e) {
+                this.setState({ loading: false, error: undefined, source: article.source });
+            } catch (e: any) {
                 this.setState({ loading: false, error: e.error || 'Ошибка связи с сервером' });
             }
         }
@@ -86,7 +86,7 @@ class ArticleSource extends Component<Props, State> {
     };
 
     onCloseError = () => {
-        this.setState({error: null});
+        this.setState({error: undefined});
         this.onClose(null);
     };
 

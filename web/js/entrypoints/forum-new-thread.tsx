@@ -31,8 +31,9 @@ class ForumNewThread extends Component<Props, State> {
         window.location.href = cancelUrl || '/forum/start';
     };
 
-    onSubmit = async (input: ForumPostSubmissionData) => {
+    onSubmit = async (input: ForumPostSubmissionData): Promise<void> => {
         const { categoryId } = this.props;
+        if (!categoryId) return;
         const request: ForumNewThreadRequest = {
             categoryId,
             name: input.name,

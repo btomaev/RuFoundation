@@ -54,7 +54,7 @@ class PageOptions extends Component<Props, State> {
     }
 
     componentDidMount() {
-        const { pathParams, optionsEnabled } = this.props;
+        const { pathParams, optionsEnabled, pageId } = this.props;
         (window as any)._openNewEditor = (func?: () => void) => {
             setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 0);
             if (optionsEnabled) {
@@ -63,7 +63,7 @@ class PageOptions extends Component<Props, State> {
                 this.setState({ isNewEditor: true, onCancelNewEditor: func });
             }
         };
-        if (pathParams["edit"])
+        if (pathParams!["edit"])
             (window as any)._openNewEditor();
     }
 
@@ -196,14 +196,16 @@ class PageOptions extends Component<Props, State> {
         const { optionsEnabled, editable, lockable, canComment, canRate, pageId, pathParams, commentThread, commentCount } = this.props;
         const { extOptions, isNewEditor } = this.state;
 
+        if (!pageId) return;
+
         if (isNewEditor) {
             return (
                 <ArticleEditor pageId={pageId}
                                isNew
                                pathParams={pathParams}
                                onClose={this.onCancelSubView}
-                               previewTitleElement={document.getElementById('page-title')}
-                               previewBodyElement={document.getElementById('page-content')} />
+                               previewTitleElement={document.getElementById('page-title')!}
+                               previewBodyElement={document.getElementById('page-content')!} />
             )
         }
 
@@ -236,23 +238,25 @@ class PageOptions extends Component<Props, State> {
     }
 
     renderSubView() {
-        return ReactDOM.createPortal(this.pickSubView(), document.getElementById('action-area'));
+        return ReactDOM.createPortal(this.pickSubView(), document.getElementById('action-area')!);
     }
 
     pickSubView() {
         const { subView } = this.state;
         const { pageId, rating, pathParams, editable, canDelete, canCreateTags } = this.props;
 
+        if (!pageId) return;
+
         switch (subView) {
             case 'edit':
                 return <ArticleEditor pageId={pageId}
                                       pathParams={pathParams}
                                       onClose={this.onCancelSubView}
-                                      previewTitleElement={document.getElementById('page-title')}
-                                      previewBodyElement={document.getElementById('page-content')} />;
+                                      previewTitleElement={document.getElementById('page-title')!}
+                                      previewBodyElement={document.getElementById('page-content')!} />;
 
             case 'rating':
-                return <ArticleRating pageId={pageId} rating={rating} onClose={this.onCancelSubView} />;
+                return <ArticleRating pageId={pageId} rating={rating!} onClose={this.onCancelSubView} />;
 
             case 'tags':
                 return <ArticleTags pageId={pageId} onClose={this.onCancelSubView} canCreateTags={canCreateTags} />;
@@ -273,7 +277,7 @@ class PageOptions extends Component<Props, State> {
                 return <ArticleRename pageId={pageId} onClose={this.onCancelSubView} />;
 
             case 'files':
-                return <ArticleFiles pageId={pageId} onClose={this.onCancelSubView} editable={editable} />;
+                return <ArticleFiles pageId={pageId} onClose={this.onCancelSubView} editable={editable!} />;
 
             case 'delete':
                 return <ArticleDelete pageId={pageId} canDelete={canDelete} onClose={this.onCancelSubView} />;

@@ -26,7 +26,7 @@ interface State {
 
 class WikidotModal extends Component<Props, State> {
     state = {
-        modalId: null
+        modalId: undefined
     };
 
     componentDidMount() {
@@ -43,7 +43,7 @@ class WikidotModal extends Component<Props, State> {
     render(): any {
         const container = getModalContainer(this.state.modalId);
         if (container)
-            return ReactDOM.createPortal(<WikidotModalWindow {...this.props} id={this.state.modalId} />, container);
+            return ReactDOM.createPortal(<WikidotModalWindow {...this.props} id={this.state.modalId!} />, container);
         return null;
     }
 }
@@ -136,7 +136,7 @@ function getModalContainer(id) {
 
 function removeModalContainer(id) {
     const node = getModalContainer(id);
-    node?.parentNode.removeChild(node);
+    node?.parentNode!.removeChild(node);
 }
 
 export function addUnmanagedModal(modal) {

@@ -1,8 +1,8 @@
 export function makePasswordToggle() {
     const togglePassword = document.querySelector("#togglePassword");
     if (togglePassword !== null) {
-        const password = document.querySelector("#id_password");
-        togglePassword.addEventListener("click", function () {
+        const password = document.querySelector("#id_password")!;
+        togglePassword.addEventListener("click",  (e) => {
             // toggle the type attribute
             password.setAttribute("type", password.getAttribute("type") === "password" ? "text" : "password");
             // toggle the icon

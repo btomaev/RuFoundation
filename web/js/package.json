@@ -21,10 +21,11 @@
     "resize-observer-polyfill": "^1.5.1",
     "sprintf-js": "^1.1.2",
     "styled-components": "^5.3.5",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "typescript": "5.4.5"
   },
   "scripts": {
-    "build": "npx ts-node build.ts",
-    "watch": "npx ts-node build.ts --watch"
+    "build": "npx tsc --noEmit & npx ts-node build.ts",
+    "watch": "npx tsc --noEmit --watch & npx ts-node build.ts --watch"
   }
 }

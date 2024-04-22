@@ -14,9 +14,9 @@ export function makeListPages(node: HTMLElement) {
     (node as any)._listpages = true;
     // end hack
 
-    const lpBasePathParams = JSON.parse(node.dataset.listPagesPathParams);
-    const lpBaseParams = JSON.parse(node.dataset.listPagesParams);
-    const lpBaseContent = JSON.parse(node.dataset.listPagesContent);
+    const lpBasePathParams = JSON.parse(node.dataset.listPagesPathParams!);
+    const lpBaseParams = JSON.parse(node.dataset.listPagesParams!);
+    const lpBaseContent = JSON.parse(node.dataset.listPagesContent!);
     const lpPageId = node.dataset.listPagesPageId;
 
     // display loader when needed.
@@ -58,8 +58,8 @@ export function makeListPages(node: HTMLElement) {
             const tmp = document.createElement('div');
             tmp.innerHTML = rendered;
             const newNode = tmp.firstElementChild;
-            node.parentNode.replaceChild(newNode, node);
-        } catch (e) {
+            node.parentNode!.replaceChild(newNode!, node);
+        } catch (e: any) {
             ReactDOM.unmountComponentAtNode(loaderInto);
             loaderInto.innerHTML = '';
             loaderInto.style.display = 'none';
@@ -70,7 +70,7 @@ export function makeListPages(node: HTMLElement) {
     // handle page switch
     const pagers = node.querySelectorAll(':scope > .pager');
     pagers.forEach(pager => pager.querySelectorAll('*[data-pagination-target]').forEach((node: HTMLElement) => {
-        node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget));
+        node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget!));
     }));
 
 }

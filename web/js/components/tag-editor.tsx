@@ -211,7 +211,7 @@ const TagEditorComponent: React.FC<Props> = ({ tags, allTags, onChange, canCreat
         setSuggestionsOpen(true);
     };
 
-    const onSelectCategory = (e: React.MouseEvent, category: string) => {
+    const onSelectCategory = (e: React.MouseEvent | undefined, category: string) => {
         if (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -219,7 +219,7 @@ const TagEditorComponent: React.FC<Props> = ({ tags, allTags, onChange, canCreat
         setInputValue(`${category}:`);
     };
 
-    const onSelectTag = (e: React.MouseEvent, tag: string) => {
+    const onSelectTag = (e: React.MouseEvent | undefined, tag: string) => {
         if (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -238,7 +238,7 @@ const TagEditorComponent: React.FC<Props> = ({ tags, allTags, onChange, canCreat
             if (p === inputRef.current || p === suggestionsRef.current) {
                 return true;
             }
-            p = p.parentNode;
+            p = p.parentNode!;
         }
         return false;
     };
@@ -301,7 +301,7 @@ const TagEditorComponent: React.FC<Props> = ({ tags, allTags, onChange, canCreat
             e.stopPropagation();
         } else if (e.key === 'Enter' && canCreateTags) {
             setInputValue('');
-            onChange([...tags.filter(x => x.toLowerCase() !== inputValue.toLowerCase()), inputValue]);
+            onChange!([...tags.filter(x => x.toLowerCase() !== inputValue.toLowerCase()), inputValue]);
             e.preventDefault();
             e.stopPropagation();
         } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {

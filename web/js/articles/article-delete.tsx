@@ -65,7 +65,7 @@ class ArticleDelete extends Component<Props, State> {
         try {
             const data = await fetchArticle(pageId);
             this.setState({ loading: false, new_name: "deleted:" + data.pageId});
-        } catch (e) {
+        } catch (e: any) {
             this.setState({loading: false, fatalError: true, error: e.error || 'Ошибка связи с сервером'});
         }
     }
@@ -78,7 +78,7 @@ class ArticleDelete extends Component<Props, State> {
 
         const { pageId } = this.props;
         const { permanent, new_name } = this.state;
-        this.setState({ saving: true, error: null, savingSuccess: false });
+        this.setState({ saving: true, error: undefined, savingSuccess: false });
         try {
             if (!permanent) {
                 const input = {
@@ -98,7 +98,7 @@ class ArticleDelete extends Component<Props, State> {
             } else {
                 window.location.reload();
             }
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ saving: false, fatalError: false, error: e.error || 'Ошибка связи с сервером' });
         }
     };
@@ -125,7 +125,7 @@ class ArticleDelete extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onCancel(null);
         }

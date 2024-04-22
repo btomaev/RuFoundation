@@ -84,8 +84,8 @@ class ArticleTags extends Component<Props, State> {
         this.setState({ loading: true });
         try {
             const [data, allTags] = await Promise.all([fetchArticle(pageId), fetchAllTags()]);
-            this.setState({ loading: false, tags: data.tags, allTags: allTags });
-        } catch (e) {
+            this.setState({ loading: false, tags: data.tags!, allTags: allTags });
+        } catch (e: any) {
             this.setState({loading: false, fatalError: true, error: e.error || 'Ошибка связи с сервером'});
         }
     }
@@ -97,7 +97,7 @@ class ArticleTags extends Component<Props, State> {
         }
 
         const { pageId } = this.props;
-        this.setState({ saving: true, error: null, savingSuccess: false });
+        this.setState({ saving: true, error: undefined, savingSuccess: false });
         const input = {
             pageId: this.props.pageId,
             tags: this.state.tags
@@ -109,7 +109,7 @@ class ArticleTags extends Component<Props, State> {
             this.setState({ savingSuccess: false });
             window.scrollTo(window.scrollX, 0);
             window.location.reload();
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ saving: false, fatalError: false, error: e.error || 'Ошибка связи с сервером' });
         }
     };
@@ -133,7 +133,7 @@ class ArticleTags extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onCancel(null);
         }

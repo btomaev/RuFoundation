@@ -95,8 +95,8 @@ class ArticleHistory extends Component<Props, State> {
         super(props);
         this.state = {
             loading: false,
-            entries: null,
-            subarea: null,
+            entries: undefined,
+            subarea: undefined,
             entryCount: 0,
             page: 1,
             perPage: 25
@@ -110,14 +110,14 @@ class ArticleHistory extends Component<Props, State> {
     async loadHistory(nextPage?: number) {
         const { pageId } = this.props;
         const { page, perPage, entries } = this.state;
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true, error: undefined });
         try {
             const realPage = nextPage || page;
             const from = (realPage-1) * perPage;
             const to = (realPage) * perPage;
             const history = await fetchArticleLog(pageId, from, to);
-            this.setState({ loading: false, error: null, entries: history.entries, entryCount: history.count, page: realPage, firstCompareEntry: history.entries[1], secondCompareEntry: history.entries[0] });
-        } catch (e) {
+            this.setState({ loading: false, error: undefined, entries: history.entries, entryCount: history.count, page: realPage, firstCompareEntry: history.entries[1], secondCompareEntry: history.entries[0] });
+        } catch (e: any) {
             this.setState({ loading: false, fatalError: entries === null, error: e.error || 'Ошибка связи с сервером' });
         }
     }
@@ -133,7 +133,7 @@ class ArticleHistory extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onClose(null);
         }
@@ -336,7 +336,7 @@ class ArticleHistory extends Component<Props, State> {
         const { pageId, pathParams } = this.props;
         fetchArticleVersion(pageId, entry.revNumber, pathParams).then(function (resp) {
             showVersionMessage(entry.revNumber, new Date(entry.createdAt), entry.user, pageId);
-            document.getElementById("page-content").innerHTML = resp.rendered;
+            document.getElementById("page-content")!.innerHTML = resp.rendered;
         })
     }
 
@@ -374,7 +374,7 @@ class ArticleHistory extends Component<Props, State> {
     }
 
     hideSubArea =  () => {
-        this.setState({subarea: null})
+        this.setState({subarea: undefined})
     }
 
     revertArticleVersion (e: React.MouseEvent, entry: ArticleLogEntry) {

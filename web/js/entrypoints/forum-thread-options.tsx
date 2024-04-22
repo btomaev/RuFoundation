@@ -63,13 +63,13 @@ class ForumThreadOptions extends Component<Props, State> {
 
         const { threadId, isPinned } = this.props;
 
-        this.setState({ isLoading: true, error: null });
+        this.setState({ isLoading: true, error: undefined });
 
         try {
             await updateForumThread({
                 threadId, isPinned: !isPinned
             });
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ error: e.error || 'Ошибка связи с сервером' });
             this.setState({ isLoading: false });
             return;
@@ -85,13 +85,13 @@ class ForumThreadOptions extends Component<Props, State> {
 
         const { threadId, isLocked } = this.props;
 
-        this.setState({ isLoading: true, error: null });
+        this.setState({ isLoading: true, error: undefined });
 
         try {
             await updateForumThread({
                 threadId, isLocked: !isLocked
             });
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ error: e.error || 'Ошибка связи с сервером' });
             this.setState({ isLoading: false });
             return;
@@ -111,7 +111,7 @@ class ForumThreadOptions extends Component<Props, State> {
     };
 
     onCloseError = () => {
-        this.setState({ error: null });
+        this.setState({ error: undefined });
     };
 
     onEditCancel = () => {
@@ -128,7 +128,7 @@ class ForumThreadOptions extends Component<Props, State> {
             await updateForumThread({
                 threadId, name: editName, description: editDescription
             })
-        } catch (e) {
+        } catch (e: any) {
             this.setState({error: e.error || 'Ошибка связи с сервером'})
             this.setState({ isLoading: false });
             return;
@@ -139,7 +139,7 @@ class ForumThreadOptions extends Component<Props, State> {
     };
 
     onChange(k: keyof State, v) {
-        this.setState({ [k]: v } as unknown)
+        this.setState({ [k]: v } as any)
     }
 
     renderEdit() {
@@ -179,7 +179,7 @@ class ForumThreadOptions extends Component<Props, State> {
             await updateForumThread({
                 threadId, categoryId: moveCategoryId
             })
-        } catch (e) {
+        } catch (e: any) {
             this.setState({error: e.error || 'Ошибка связи с сервером'})
             this.setState({ isLoading: false });
             return;

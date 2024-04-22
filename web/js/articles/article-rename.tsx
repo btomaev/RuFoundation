@@ -62,7 +62,7 @@ class ArticleRename extends Component<Props, State> {
         try {
             const data = await fetchArticle(pageId);
             this.setState({ loading: false, new_name: data.pageId});
-        } catch (e) {
+        } catch (e: any) {
             this.setState({loading: false, fatalError: true, error: e.error || 'Ошибка связи с сервером'});
         }
     }
@@ -75,7 +75,7 @@ class ArticleRename extends Component<Props, State> {
 
         const { pageId } = this.props;
         const { new_name } = this.state;
-        this.setState({ saving: true, error: null, savingSuccess: false });
+        this.setState({ saving: true, error: undefined, savingSuccess: false });
         const input = {
             pageId: new_name,
         };
@@ -86,7 +86,7 @@ class ArticleRename extends Component<Props, State> {
             this.setState({ savingSuccess: false });
             window.scrollTo(window.scrollX, 0);
             window.location.href = `/${new_name}`;
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ saving: false, fatalError: false, error: e.error || 'Ошибка связи с сервером' });
         }
     };
@@ -107,7 +107,7 @@ class ArticleRename extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onCancel(null);
         }

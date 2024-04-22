@@ -121,8 +121,8 @@ class ArticleEditor extends Component<Props, State> {
             this.setState({ loading: true });
             try {
                 const data = await fetchArticle(pageId);
-                this.setState({ loading: false, source: data.source, title: data.title });
-            } catch (e) {
+                this.setState({ loading: false, source: data.source!, title: data.title! });
+            } catch (e: any) {
                 this.setState({ loading: false, fatalError: true, error: e.error || 'Ошибка связи с сервером' });
             }
         } else {
@@ -142,7 +142,7 @@ class ArticleEditor extends Component<Props, State> {
 
     onSubmit = async () => {
         const { isNew, pageId, pathParams } = this.props;
-        this.setState({ saving: true, error: null, savingSuccess: false });
+        this.setState({ saving: true, error: undefined, savingSuccess: false });
         const input = {
             pageId: this.props.pageId,
             title: this.state.title,
@@ -156,7 +156,7 @@ class ArticleEditor extends Component<Props, State> {
                 await sleep(1000);
                 this.setState({ savingSuccess: false});
                 window.location.href = `/${pageId}`;
-            } catch (e) {
+            } catch (e: any) {
                 this.setState({ saving: false, saved: false, fatalError: false, error: e.error || 'Ошибка связи с сервером' });
             }
         } else {
@@ -166,12 +166,12 @@ class ArticleEditor extends Component<Props, State> {
                 await sleep(1000);
                 this.setState({ savingSuccess: false });
                 window.scrollTo(window.scrollX, 0);
-                if (pathParams["edit"]) {
+                if (pathParams!["edit"]) {
                     window.location.href = `/${pageId}`;
                 } else {
                     window.location.reload();
                 }
-            } catch (e) {
+            } catch (e: any) {
                 this.setState({ saving: false, saved: false, fatalError: false, error: e.error || 'Ошибка связи с сервером' });
             }
         }
@@ -179,6 +179,7 @@ class ArticleEditor extends Component<Props, State> {
 
     onPreview = () => {
         const { previewTitleElement, previewBodyElement } = this.props;
+        if (!previewTitleElement) return;
         const data = {
             pageId: this.props.pageId,
             title: this.state.title,
@@ -189,7 +190,7 @@ class ArticleEditor extends Component<Props, State> {
             showPreviewMessage();
             getElement(previewTitleElement).innerText = resp.title;
             getElement(previewTitleElement).style.display = '';
-            getElement(previewBodyElement).innerHTML = resp.content;
+            getElement(previewBodyElement!).innerHTML = resp.content;
         });
     };
 
@@ -200,13 +201,14 @@ class ArticleEditor extends Component<Props, State> {
         }
         removeMessage();
         const { previewTitleElement, previewBodyElement } = this.props;
+        if (!previewTitleElement) return;
         const { previewOriginalTitle, previewOriginalTitleDisplay, previewOriginalBody } = this.state;
         if (typeof(previewOriginalTitle) === 'string') {
             getElement(previewTitleElement).innerText = previewOriginalTitle;
-            getElement(previewTitleElement).style.display = previewOriginalTitleDisplay;
+            getElement(previewTitleElement).style.display = previewOriginalTitleDisplay!;
         }
         if (typeof(previewOriginalBody) === 'string') {
-            getElement(previewBodyElement).innerHTML = previewOriginalBody;
+            getElement(previewBodyElement!).innerHTML = previewOriginalBody;
         }
         if (this.props.onClose)
             this.props.onClose()
@@ -220,7 +222,7 @@ class ArticleEditor extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onCancel(null);
         }

@@ -93,13 +93,13 @@ class ArticleDiffView extends Component<Props, State> {
     async compareSource() {
         const { pageId, firstEntry, secondEntry, pathParams } = this.props;
 
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true, error: undefined });
         try {
             const first = await fetchArticleVersion(pageId, firstEntry.revNumber, pathParams);
             const second = await fetchArticleVersion(pageId, secondEntry.revNumber, pathParams);
 
-            this.setState({ loading: false, error: null, firstSource: first.source, secondSource: second.source });
-        } catch (e) {
+            this.setState({ loading: false, error: undefined, firstSource: first.source, secondSource: second.source });
+        } catch (e: any) {
             this.setState({ loading: false, error: e.error || 'Ошибка связи с сервером' });
         }
     }
@@ -114,7 +114,7 @@ class ArticleDiffView extends Component<Props, State> {
     };
 
     onCloseError = () => {
-        this.setState({error: null});
+        this.setState({error: undefined});
         this.onClose(null);
     };
 

@@ -73,11 +73,11 @@ class ArticleRating extends Component<Props, State> {
 
     async loadRating() {
         const { pageId } = this.props;
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true, error: undefined });
         try {
             const rating = await fetchPageVotes(pageId);
-            this.setState({ loading: false, error: null, votes: rating.votes, rating: rating.rating, popularity: rating.popularity, mode: rating.mode });
-        } catch (e) {
+            this.setState({ loading: false, error: undefined, votes: rating.votes, rating: rating.rating, popularity: rating.popularity, mode: rating.mode });
+        } catch (e: any) {
             this.setState({ loading: false, error: e.error || 'Ошибка связи с сервером' });
         }
     }
@@ -92,7 +92,7 @@ class ArticleRating extends Component<Props, State> {
     };
 
     onCloseError = () => {
-        this.setState({error: null});
+        this.setState({error: undefined});
         this.onClose(null);
     };
 
@@ -125,6 +125,8 @@ class ArticleRating extends Component<Props, State> {
         const { pageId } = this.props;
         const { rating, votes, popularity } = this.state;
 
+        if (!votes) return;
+
         return (
             <div className="w-stars-rate-module" data-page-id={pageId}>
                 <div className="w-stars-rate-rating">рейтинг:&nbsp;<span className="w-stars-rate-number">{votes.length ? sprintf('%.1f', rating) : '—'}</span></div>
@@ -142,6 +144,8 @@ class ArticleRating extends Component<Props, State> {
 
     renderUpDownRatingDistribution() {
         const { votes } = this.state;
+
+        if (!votes) return;
 
         let votesCount = [0, 0];
 
@@ -175,8 +179,9 @@ class ArticleRating extends Component<Props, State> {
     renderStarsRatingDistribution() {
         const { votes } = this.state;
 
+        if (!votes) return;
+
         let votesCount = [0, 0, 0, 0, 0, 0];
-        let votesPercent = [0, 0, 0, 0, 0, 0];
 
         votes?.forEach(vote => {
             let minCount = Math.floor(vote.value);
@@ -249,6 +254,9 @@ class ArticleRating extends Component<Props, State> {
 
     render() {
         const { error, loading, votes } = this.state;
+
+        if (!votes) return;
+
         return (
             <Styles>
                 { error && (

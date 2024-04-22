@@ -2,12 +2,12 @@ import {showErrorModal} from "../util/wikidot-modal";
 import {ModuleRateResponse, ratePage} from "../api/rate"
 import {sprintf} from 'sprintf-js'
 
-async function onClick(e: MouseEvent, pageId: string, vote: number): Promise<ModuleRateResponse> {
+async function onClick(e: MouseEvent, pageId: string, vote: number | undefined): Promise<ModuleRateResponse> {
     e.preventDefault();
     e.stopPropagation();
     try {
-        return await ratePage({pageId, value: vote});
-    } catch (e) {
+        return await ratePage({pageId, value: vote!});
+    } catch (e: any) {
         showErrorModal(e.error || 'Ошибка связи с сервером');
         throw e;
     }
@@ -28,15 +28,17 @@ export function makeStarsRateModule(node: HTMLElement) {
 
     const pageId = node.dataset.pageId;
 
-    const number: HTMLElement = node.querySelector('.w-stars-rate-rating .w-stars-rate-number');
-    const votes: HTMLElement = node.querySelector('.w-stars-rate-votes .w-stars-rate-number');
-    const popularity: HTMLElement = node.querySelector('.w-stars-rate-votes .w-stars-rate-popularity');
-    const rateWrapper: HTMLElement = node.querySelector('.w-stars-rate-stars-wrapper');
-    const control: HTMLElement = rateWrapper.querySelector('.w-stars-rate-stars-view')
-    const cancel: HTMLElement = node.querySelector('.w-stars-rate-cancel');
+    if (!pageId) return;
+
+    const number: HTMLElement = node.querySelector('.w-stars-rate-rating .w-stars-rate-number')!;
+    const votes: HTMLElement = node.querySelector('.w-stars-rate-votes .w-stars-rate-number')!;
+    const popularity: HTMLElement = node.querySelector('.w-stars-rate-votes .w-stars-rate-popularity')!;
+    const rateWrapper: HTMLElement = node.querySelector('.w-stars-rate-stars-wrapper')!;
+    const control: HTMLElement = rateWrapper.querySelector('.w-stars-rate-stars-view')!;
+    const cancel: HTMLElement = node.querySelector('.w-stars-rate-cancel')!;
 
     let originalRateWidth = control.style.width;
-    let rateWith = null;
+    let rateWith: number | undefined = undefined;
 
     const callback = function (votesData) {
         updateRating(number, votes, popularity, control, votesData);
@@ -57,5 +59,5 @@ export function makeStarsRateModule(node: HTMLElement) {
     });
 
     rateWrapper.addEventListener('click', (e) => onClick(e, pageId, rateWith).then(callback));
-    cancel.addEventListener('click', (e) => onClick(e, pageId, null).then(callback));
+    cancel.addEventListener('click', (e) => onClick(e, pageId, undefined).then(callback));
 }

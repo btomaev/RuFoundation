@@ -41,6 +41,8 @@ class WikidotMessage extends Component<Props> {
     render() {
         const { children, buttons, background } = this.props;
 
+        if (!buttons) return;
+
         return (
             <Styles>
                 <div className="w-message" style={{ background: background }}>
@@ -71,7 +73,7 @@ function addMessage(message: JSX.Element) {
 
 
 export function removeMessage() {
-    const node = getMessageContainer();
+    const node = getMessageContainer()!;
     ReactDOM.unmountComponentAtNode(node);
 }
 

@@ -1,5 +1,5 @@
 export function getCookie(name: string): any {
-    let cookieValue = null;
+    let cookieValue: string | undefined = undefined;
     if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {

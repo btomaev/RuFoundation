@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "jsx": "react-jsx",
+        "moduleResolution": "NodeNext",
+        "module": "NodeNext",
+        "removeComments": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "noImplicitAny": false,
+        "noImplicitThis": false,
+        "alwaysStrict": true,
+        "strict": true
+    },
+    "exclude":[
+        "node_modules"
+    ]
+}

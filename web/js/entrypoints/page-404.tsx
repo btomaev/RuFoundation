@@ -16,7 +16,7 @@ class Page404 extends Component<Props, State> {
     constructor(props) {
         super(props)
         this.state = {
-            isCreate: !!this.props.pathParams['edit'],
+            isCreate: !!this.props.pathParams!['edit'],
         };
     }
 

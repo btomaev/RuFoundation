@@ -48,10 +48,10 @@ interface State {
 
 
 class ForumPostOptions extends Component<Props, State> {
-    refSelf: HTMLElement = null;
-    refPreviewTitle: HTMLElement = null;
-    refPreviewContent: HTMLElement = null;
-    refReplyPreview: HTMLElement = null;
+    refSelf: HTMLElement | null = null;
+    refPreviewTitle: HTMLElement | null = null;
+    refPreviewContent: HTMLElement | null = null;
+    refReplyPreview: HTMLElement | null = null;
 
     constructor(props: Props) {
         super(props);
@@ -73,19 +73,21 @@ class ForumPostOptions extends Component<Props, State> {
             return
         }
         const longPost = this.refSelf.parentNode;
-        this.refPreviewTitle = longPost.querySelector('.head .title');
-        this.refPreviewContent = longPost.querySelector('.content');
-        let refReplyPreview: HTMLElement = longPost.querySelector('.w-reply-preview');
+        if (!longPost) return null;
+        this.refPreviewTitle = longPost.querySelector('.head .title')!;
+        this.refPreviewContent = longPost.querySelector('.content')!;
+        let refReplyPreview: HTMLElement = longPost.querySelector('.w-reply-preview')!;
         if (!refReplyPreview) {
             refReplyPreview = document.createElement('div');
             refReplyPreview.className = 'w-reply-preview';
-            this.refSelf.parentNode.insertBefore(refReplyPreview, this.refSelf);
+            this.refSelf.parentNode!.insertBefore(refReplyPreview, this.refSelf);
         }
         this.refReplyPreview = refReplyPreview;
-        this.setState({ originalPreviewTitle: this.refPreviewTitle.textContent, originalPreviewContent: this.refPreviewContent.innerHTML });
+        this.setState({ originalPreviewTitle: this.refPreviewTitle.textContent!, originalPreviewContent: this.refPreviewContent.innerHTML });
     }
 
     onReplyClose = () => {
+        if (!this.refReplyPreview) return null;
         this.setState({ isReplying: false });
         if (this.refReplyPreview.firstChild) {
             ReactDOM.unmountComponentAtNode(this.refReplyPreview);
@@ -126,8 +128,8 @@ class ForumPostOptions extends Component<Props, State> {
 
     onEditClose = () => {
         const { originalPreviewTitle, originalPreviewContent } = this.state;
-        this.refPreviewTitle.textContent = originalPreviewTitle;
-        this.refPreviewContent.innerHTML = originalPreviewContent;
+        this.refPreviewTitle!.textContent = originalPreviewTitle!;
+        this.refPreviewContent!.innerHTML = originalPreviewContent!;
         this.setState({ isEditing: false });
     };
 
@@ -139,15 +141,15 @@ class ForumPostOptions extends Component<Props, State> {
             source: input.source
         };
         const result = await updateForumPost(request);
-        this.refPreviewTitle.textContent = result.name;
-        this.refPreviewContent.innerHTML = result.content;
+        this.refPreviewTitle!.textContent = result.name;
+        this.refPreviewContent!.innerHTML = result.content;
         this.setState({ originalPreviewTitle: result.name, originalPreviewContent: result.content });
         this.onEditClose();
     };
 
     onEditPreview = (input: ForumPostPreviewData) => {
-        this.refPreviewTitle.textContent = input.name;
-        this.refPreviewContent.innerHTML = input.content;
+        this.refPreviewTitle!.textContent = input.name;
+        this.refPreviewContent!.innerHTML = input.content;
         this.setState({ revisionsOpen: false, currentRevision: undefined });
     };
 
@@ -167,20 +169,23 @@ class ForumPostOptions extends Component<Props, State> {
         const { postId } = this.props;
         try {
             await deleteForumPost(postId);
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ deleteError: e.error || 'Ошибка связи с сервером' })
             return
         }
         // successful deletion. reflect the changes (drop the current post / tree)
         // first, unmount self. this makes sure any editors are taken care of
-        const post = this.refSelf.parentElement.parentElement; // should point to class .post
+        if (!this.refSelf) return null;
+        const post = this.refSelf.parentElement!.parentElement; // should point to class .post
+        if (!post) return null;
         ReactDOM.unmountComponentAtNode(this.refSelf);
         const parent = post.parentElement;
+        if (!parent) return null;
         parent.removeChild(post);
-        if (parent.classList.contains('post-container') && parent.parentElement.classList.contains('post-container')) {
+        if (parent.classList.contains('post-container') && parent.parentElement!.classList.contains('post-container')) {
             // check if parent element has no children anymore
             if (!parent.firstElementChild) {
-                parent.parentNode.removeChild(parent);
+                parent.parentNode!.removeChild(parent);
             }
         }
     };
@@ -203,7 +208,7 @@ class ForumPostOptions extends Component<Props, State> {
             const {postId} = this.props;
             const revisions = await fetchForumPostVersions(postId);
             this.setState({ revisionsOpen: true, revisions: revisions.versions });
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ revisionsOpen: false, deleteError: e.error || 'Ошибка связи с сервером' });
         }
 
@@ -214,8 +219,8 @@ class ForumPostOptions extends Component<Props, State> {
         e.stopPropagation();
         const { originalPreviewTitle, originalPreviewContent, currentRevision } = this.state;
         if (currentRevision) {
-            this.refPreviewTitle.textContent = originalPreviewTitle;
-            this.refPreviewContent.innerHTML = originalPreviewContent;
+            this.refPreviewTitle!.textContent = originalPreviewTitle!;
+            this.refPreviewContent!.innerHTML = originalPreviewContent!;
         }
         this.setState({ revisionsOpen: false, currentRevision: undefined });
     }
@@ -226,8 +231,8 @@ class ForumPostOptions extends Component<Props, State> {
         const { postId } = this.props;
         const data = await fetchForumPost(postId, date);
         this.setState({ currentRevision: date });
-        this.refPreviewTitle.textContent = data.name;
-        this.refPreviewContent.innerHTML = data.content;
+        this.refPreviewTitle!.textContent = data.name;
+        this.refPreviewContent!.innerHTML = data.content;
     }
 
     render() {
@@ -263,7 +268,7 @@ class ForumPostOptions extends Component<Props, State> {
                         </table>
                     </div>
                 )}
-                <div style={{ display: 'none' }} ref={r=>this.refSelf=r?.parentElement} />
+                <div style={{ display: 'none' }} ref={r=>this.refSelf=r?.parentElement!} />
                 { deleteError && (
                     <WikidotModal buttons={[{title: 'Закрыть', onClick: this.onCloseError}]} isError>
                         <p><strong>Ошибка:</strong> {deleteError}</p>

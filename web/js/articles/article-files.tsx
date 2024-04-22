@@ -188,11 +188,11 @@ class ArticleFiles extends Component<Props, State> {
 
     async loadFiles() {
         const { pageId } = this.props;
-        this.setState({ loading: true, error: null });
+        this.setState({ loading: true, error: undefined });
         try {
             const { files, softLimit, hardLimit, softUsed, hardUsed } = await fetchArticleFiles(pageId);
-            this.setState({ loading: false, error: null, files, softLimit, hardLimit, softUsed, hardUsed, optionsIndex: null, renameIndex: null });
-        } catch (e) {
+            this.setState({ loading: false, error: undefined, files, softLimit, hardLimit, softUsed, hardUsed, optionsIndex: null, renameIndex: null });
+        } catch (e: any) {
             this.setState({ loading: false, error: e.error || 'Ошибка связи с сервером' });
         }
     }
@@ -207,7 +207,7 @@ class ArticleFiles extends Component<Props, State> {
     };
 
     onCloseError = () => {
-        this.setState({error: null});
+        this.setState({error: undefined});
         this.onClose(null);
     };
 
@@ -264,7 +264,7 @@ class ArticleFiles extends Component<Props, State> {
             const uploadFiles = this.state.uploadFiles.filter(x => x.file !== file.file);
             this.setState({ uploadFiles });
             this.loadFiles();
-        } catch (e) {
+        } catch (e: any) {
             this.updateFile(file, {error: e.error || 'Ошибка загрузки файла', uploading: false})
         }
     }
@@ -348,20 +348,20 @@ class ArticleFiles extends Component<Props, State> {
         const { pageId } = this.props;
         e.preventDefault();
         e.stopPropagation();
-        this.setState({ renameIndex: i, renameName: this.state.files[i].name });
+        this.setState({ renameIndex: i, renameName: this.state.files![i].name });
     };
 
     onOptionsDelete = async (e, i) => {
         const { pageId } = this.props;
         e.preventDefault();
         e.stopPropagation();
-        const file = this.state.files[i];
+        const file = this.state.files![i];
         try {
             this.setState({ loading: true });
             await deleteFile(file.id);
             this.setState({ optionsIndex: null });
             this.loadFiles();
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ loading: false, error: e.error || 'Ошибка удаления файла' });
         }
     };
@@ -375,10 +375,10 @@ class ArticleFiles extends Component<Props, State> {
         const { files, renameIndex, renameName } = this.state;
         try {
             this.setState({ loading: true });
-            await renameFile(files[renameIndex].id, renameName);
+            await renameFile(files![renameIndex!].id, renameName!);
             this.setState({ optionsIndex: null });
             this.loadFiles();
-        } catch (e) {
+        } catch (e: any) {
             this.setState({ loading: false, error: e.error || 'Ошибка переименования файла' });
         }
     };
@@ -405,11 +405,11 @@ class ArticleFiles extends Component<Props, State> {
                                 <tbody>
                                 <tr>
                                     <td>Текущее имя:</td>
-                                    <td>{files[renameIndex].name}</td>
+                                    <td>{files![renameIndex].name}</td>
                                 </tr>
                                 <tr>
                                     <td>Новое имя:</td>
-                                    <td><input type="text" value={renameName} onChange={this.onRenameChange} /></td>
+                                    <td><input type="text" value={renameName!} onChange={this.onRenameChange} /></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -425,12 +425,12 @@ class ArticleFiles extends Component<Props, State> {
                             <p>
                                 Количество файлов: {files.length}<br/>
                                 Общий размер: {this.formatSize(files.reduce((v, f) => v + f.size, 0))}
-                                {(softLimit > 0 || hardLimit > 0) && (
+                                {(softLimit! > 0 || hardLimit! > 0) && (
                                     <>
                                         <br/>
                                         Использовано места на сайте:
-                                        {softLimit > 0 && <>{' '}{this.formatSize(softUsed)} из {this.formatSize(softLimit)}</>}
-                                        {hardLimit > 0 && <>{` ${softLimit > 0 ? '(' : ''}`}{this.formatSize(hardUsed)} из {this.formatSize(hardLimit)}{`${softLimit > 0 ? ')' : ''}`}</>}
+                                        {softLimit! > 0 && <>{' '}{this.formatSize(softUsed)} из {this.formatSize(softLimit)}</>}
+                                        {hardLimit! > 0 && <>{` ${softLimit! > 0 ? '(' : ''}`}{this.formatSize(hardUsed)} из {this.formatSize(hardLimit)}{`${softLimit! > 0 ? ')' : ''}`}</>}
                                     </>
                                 )}
                             </p>

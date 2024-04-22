@@ -88,9 +88,9 @@ class ForumPostEditor extends Component<Props, State> {
         if (!isNew) {
             this.setState({ loading: true });
             try {
-                const data = await fetchForumPost(postId);
+                const data = await fetchForumPost(postId!);
                 this.setState({ loading: false, source: data.source, name: data.name });
-            } catch (e) {
+            } catch (e: any) {
                 this.setState({ loading: false, fatalError: true, error: e.error || 'Ошибка связи с сервером' });
             }
         } else {
@@ -122,11 +122,11 @@ class ForumPostEditor extends Component<Props, State> {
             const input: ForumPostSubmissionData = {
                 name: name, description, source
             };
-            this.setState({ saving: true, error: null, savingSuccess: false });
+            this.setState({ saving: true, error: undefined, savingSuccess: false });
             try {
                 await onSubmit(input);
-                this.setState({ saving: false, error: null, savingSuccess: false, source: '', name: initialTitle });
-            } catch (e) {
+                this.setState({ saving: false, error: undefined, savingSuccess: false, source: '', name: initialTitle! });
+            } catch (e: any) {
                 this.setState({ loading: false, saving: false, fatalError: false, error: e.message || e.error || 'Ошибка связи с сервером' });
             }
         }
@@ -167,7 +167,7 @@ class ForumPostEditor extends Component<Props, State> {
 
     onCloseError = () => {
         const { fatalError } = this.state;
-        this.setState({error: null});
+        this.setState({error: undefined});
         if (fatalError) {
             this.onCancel(null);
         }

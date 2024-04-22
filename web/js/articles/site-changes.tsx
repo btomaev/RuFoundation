@@ -14,8 +14,8 @@ export function makeSiteChanges(node: HTMLElement) {
     (node as any)._sitechanges = true;
     // end hack
 
-    const scBasePathParams = JSON.parse(node.dataset.siteChangesPathParams);
-    const scBaseParams = JSON.parse(node.dataset.siteChangesParams);
+    const scBasePathParams = JSON.parse(node.dataset.siteChangesPathParams!);
+    const scBaseParams = JSON.parse(node.dataset.siteChangesParams!);
 
     // display loader when needed.
     const loaderInto = document.createElement('div');
@@ -34,7 +34,7 @@ export function makeSiteChanges(node: HTMLElement) {
     node.appendChild(loaderInto);
 
     //
-    const switchPage = async (e: MouseEvent, page: string, addParams: {}) => {
+    const switchPage = async (e: MouseEvent | undefined, page: string, addParams: {}) => {
         if (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -56,8 +56,8 @@ export function makeSiteChanges(node: HTMLElement) {
             const tmp = document.createElement('div');
             tmp.innerHTML = rendered;
             const newNode = tmp.firstElementChild;
-            node.parentNode.replaceChild(newNode, node);
-        } catch (e) {
+            node.parentNode!.replaceChild(newNode!, node);
+        } catch (e: any) {
             ReactDOM.unmountComponentAtNode(loaderInto);
             loaderInto.innerHTML = '';
             loaderInto.style.display = 'none';
@@ -68,12 +68,12 @@ export function makeSiteChanges(node: HTMLElement) {
     // handle page switch
     const pagers = node.querySelectorAll(':scope > .changes-list > .pager');
     pagers.forEach(pager => pager.querySelectorAll('*[data-pagination-target]').forEach((node: HTMLElement) => {
-        node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget, {}));
+        node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget!, {}));
     }));
 
     // handle type filters
-    let allFilter = null;
-    let typeFilters = [];
+    let allFilter: HTMLInputElement | undefined = undefined;
+    let typeFilters: HTMLInputElement[] = [];
     node.querySelectorAll('.w-type-filter input').forEach((input: HTMLInputElement) => {
         if (input.name === '*') {
             allFilter = input;
@@ -93,7 +93,8 @@ export function makeSiteChanges(node: HTMLElement) {
     });
 
     typeFilters.forEach(filter => {
-        filter.addEventListener('change', (e) => {
+        filter.addEventListener('change', (e: any) => {
+            if (!allFilter) return;
             if (!e.target.checked && !typeFilters.find(x => x.checked)) {
                 allFilter.checked = true;
                 return;
@@ -103,7 +104,7 @@ export function makeSiteChanges(node: HTMLElement) {
     });
 
     node.querySelector('form input.btn')?.addEventListener('click', () => {
-        const types = [];
+        const types: string[] = [];
         typeFilters.forEach(filter => {
             if (filter.checked) {
                 types.push(filter.name);
@@ -118,7 +119,7 @@ export function makeSiteChanges(node: HTMLElement) {
         typeFilters.forEach(filter => addParams[filter.name] = 'false');
         types.forEach(t => addParams[t] = 'true');
 
-        switchPage(null, "1", addParams);
+        switchPage(undefined, "1", addParams);
     });
 
 }

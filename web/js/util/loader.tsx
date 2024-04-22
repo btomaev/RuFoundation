@@ -32,11 +32,11 @@ overflow: hidden;
     div {
       box-sizing: content-box;
       animation: ldio-rmqiozoxwgk 1s linear infinite;
-      top: ${props => props.size/2}px;
-      left: ${props => props.size/2}px;
+      top: ${props => props.size!/2}px;
+      left: ${props => props.size!/2}px;
       position: absolute;
-      width: ${props => props.size - props.borderSize*2}px;
-      height: ${props => props.size - props.borderSize*2}px;
+      width: ${props => props.size! - props.borderSize!*2}px;
+      height: ${props => props.size! - props.borderSize!*2}px;
       border: ${props => props.borderSize}px solid ${props => props.color};
       border-top-color: transparent;
       border-radius: 50%;
