@@ -67,14 +67,14 @@ export function makeSiteChanges(node: HTMLElement) {
 
     // handle page switch
     const pagers = node.querySelectorAll(':scope > .changes-list > .pager');
-    pagers.forEach(pager => pager.querySelectorAll('*[data-pagination-target]').forEach((node: HTMLElement) => {
+    pagers.forEach(pager => pager.querySelectorAll<HTMLElement>('*[data-pagination-target]').forEach((node: HTMLElement) => {
         node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget!, {}));
     }));
 
     // handle type filters
     let allFilter: HTMLInputElement | undefined = undefined;
     let typeFilters: HTMLInputElement[] = [];
-    node.querySelectorAll('.w-type-filter input').forEach((input: HTMLInputElement) => {
+    node.querySelectorAll<HTMLInputElement>('.w-type-filter input').forEach((input: HTMLInputElement) => {
         if (input.name === '*') {
             allFilter = input;
         } else {
@@ -82,7 +82,7 @@ export function makeSiteChanges(node: HTMLElement) {
         }
     });
 
-    allFilter.addEventListener('change', (e) => {
+    allFilter!.addEventListener('change', (e: any) => {
         if (!e.target.checked && !typeFilters.find(x => x.checked)) {
             e.target.checked = true;
             return;

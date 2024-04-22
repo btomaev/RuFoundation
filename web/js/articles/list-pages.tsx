@@ -69,7 +69,7 @@ export function makeListPages(node: HTMLElement) {
 
     // handle page switch
     const pagers = node.querySelectorAll(':scope > .pager');
-    pagers.forEach(pager => pager.querySelectorAll('*[data-pagination-target]').forEach((node: HTMLElement) => {
+    pagers.forEach(pager => pager.querySelectorAll<HTMLElement>('*[data-pagination-target]').forEach((node: HTMLElement) => {
         node.addEventListener('click', (e) => switchPage(e, node.dataset.paginationTarget!));
     }));
 

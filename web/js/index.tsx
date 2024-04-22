@@ -32,12 +32,12 @@ function renderTo(where: HTMLElement, what: any) {
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    document.querySelectorAll('#create-new-page').forEach((node: HTMLElement) => renderTo(node, <Page404 {...JSON.parse(node.dataset.config)} />));
-    document.querySelectorAll('#page-options-container').forEach((node: HTMLElement) => renderTo(node, <PageOptions {...JSON.parse(node.dataset.config)} />));
-    document.querySelectorAll('#login-status').forEach((node: HTMLElement) => renderTo(node, <PageLoginStatus {...JSON.parse(node.dataset.config)} />));
-    document.querySelectorAll('.w-forum-new-thread').forEach((node: HTMLElement) => renderTo(node, <ForumNewThread {...JSON.parse(node.dataset.config)} />));
-    document.querySelectorAll('.w-forum-new-post').forEach((node: HTMLElement) => renderTo(node, <ForumNewPost {...JSON.parse(node.dataset.config)} />));
-    document.querySelectorAll('.w-forum-thread-options').forEach((node: HTMLElement) => renderTo(node, <ForumThreadOptions {...JSON.parse(node.dataset.config)} />));
+    document.querySelectorAll<HTMLElement>('#create-new-page').forEach((node: HTMLElement) => renderTo(node, <Page404 {...JSON.parse(node.dataset.config!)} />));
+    document.querySelectorAll<HTMLElement>('#page-options-container').forEach((node: HTMLElement) => renderTo(node, <PageOptions {...JSON.parse(node.dataset.config!)} />));
+    document.querySelectorAll<HTMLElement>('#login-status').forEach((node: HTMLElement) => renderTo(node, <PageLoginStatus {...JSON.parse(node.dataset.config!)} />));
+    document.querySelectorAll<HTMLElement>('.w-forum-new-thread').forEach((node: HTMLElement) => renderTo(node, <ForumNewThread {...JSON.parse(node.dataset.config!)} />));
+    document.querySelectorAll<HTMLElement>('.w-forum-new-post').forEach((node: HTMLElement) => renderTo(node, <ForumNewPost {...JSON.parse(node.dataset.config!)} />));
+    document.querySelectorAll<HTMLElement>('.w-forum-thread-options').forEach((node: HTMLElement) => renderTo(node, <ForumThreadOptions {...JSON.parse(node.dataset.config!)} />));
 
     makePasswordToggle();
 
@@ -76,7 +76,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
 
     // enable collapsibles that loaded with HTML
-    document.querySelectorAll('*').forEach((node: HTMLElement) => {
+    document.querySelectorAll<HTMLElement>('*').forEach( (node: HTMLElement) => {
         if (node.nodeType === Node.ELEMENT_NODE) {
             processNode(node);
         }
@@ -91,7 +91,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         return;
                     }
                     processNode(node);
-                    node.querySelectorAll('*').forEach((subnode: HTMLElement) => {
+                    node.querySelectorAll<HTMLElement>('*').forEach((subnode: HTMLElement) => {
                         if (subnode.nodeType === Node.ELEMENT_NODE) {
                             processNode(subnode);
                         }
