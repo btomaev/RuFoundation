@@ -86,12 +86,12 @@ window.addEventListener('DOMContentLoaded', () => {
     const observer = new MutationObserver((mutationList) => {
         mutationList.forEach(record => {
             if (record.type === 'childList') {
-                record.addedNodes.forEach((node: HTMLElement) => {
+                record.addedNodes.forEach((node: any) => {
                     if (node.nodeType !== Node.ELEMENT_NODE) {
                         return;
                     }
                     processNode(node);
-                    node.querySelectorAll<HTMLElement>('*').forEach((subnode: HTMLElement) => {
+                    (node as HTMLElement).querySelectorAll<HTMLElement>('*').forEach((subnode: HTMLElement) => {
                         if (subnode.nodeType === Node.ELEMENT_NODE) {
                             processNode(subnode);
                         }

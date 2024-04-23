@@ -367,7 +367,7 @@ const TagEditorComponent: React.FC<Props> = ({ tags, allTags, onChange, canCreat
                 </TagInputTitle>
                 <TagInput onChange={onInputChange} type="text" value={inputValue} onFocus={onInputFocus} ref={inputRef} onKeyDown={onInputKeyDown} />
                 {!!inputValue.trim().length && !!filteredCategories.length && suggestionsOpen && (
-                    <TagSuggestionList ref={suggestionsRef!}>
+                    <TagSuggestionList ref={suggestionsRef}>
                         {filteredCategories.map(category => (
                             <React.Fragment key={category.slug}>
                                 <TagSuggestionCategory data-selector={`${category.slug}:`} className={selectedToAdd === `${category.slug}:` ? 'active' : ''} onClick={e => onSelectCategory(e, category.slug)}>
