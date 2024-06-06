@@ -370,6 +370,7 @@ dependencies = [
  "pest_derive",
  "proptest",
  "pyo3",
+ "pyo3-build-config 0.14.5",
  "rand",
  "ref-map",
  "regex",
@@ -792,10 +793,19 @@ dependencies = [
  "indoc",
  "libc",
  "parking_lot",
- "pyo3-build-config",
+ "pyo3-build-config 0.16.5",
  "pyo3-ffi",
  "pyo3-macros",
  "unindent",
+]
+
+[[package]]
+name = "pyo3-build-config"
+version = "0.14.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d12961738cacbd7f91b7c43bc25cfeeaa2698ad07a04b3be0aa88b950865738f"
+dependencies = [
+ "once_cell",
 ]
 
 [[package]]
@@ -815,7 +825,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c275a07127c1aca33031a563e384ffdd485aee34ef131116fcd58e3430d1742b"
 dependencies = [
  "libc",
- "pyo3-build-config",
+ "pyo3-build-config 0.16.5",
 ]
 
 [[package]]
